@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
 import * as tf from "@tensorflow/tfjs";
-const model = await tf.loadLayersModel("");
 
 function App() {
-  const [inputText, setInputText] = useState("");
-  const [resultText, setResultText] = useState("");
+  let [inputText, setInputText] = useState("");
+  let [resultText, setResultText] = useState("");
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
@@ -13,11 +12,14 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-
+    model = await tf.loadModel('model/model.json')
+    let prediction = model.predict([String(inputText)])
+    const myArray = ['AddToPlaylist', 'BookRestaurant', 'GetWeather', 'PlayMusic', 'RateBook', 'SearchCreativeWork', 'SearchScreeningEvent'];
+    let i = prediction.indexOf(Math.max(...prediction));
     // Here you would call your intent classification function
     // and set the result text in state based on the returned result
-
-    setResultText("Some example result");
+    let result = myArray[i]
+    setResultText(result);
   };
 
   return (
